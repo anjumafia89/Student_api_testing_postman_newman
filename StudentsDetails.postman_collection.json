@@ -1,0 +1,315 @@
+{
+  "info": {
+    "_postman_id": "e94bb22d-d1d6-45fc-a3ed-7d4fc7e3d6d8",
+    "name": "StudentsDetails",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "40193468",
+    "_collection_link": "https://go.postman.co/collection/40193468-e94bb22d-d1d6-45fc-a3ed-7d4fc7e3d6d8?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Get_Student",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://thetestingworldapi.com/api/studentsDetails",
+          "protocol": "https",
+          "host": [
+            "thetestingworldapi",
+            "com"
+          ],
+          "path": [
+            "api",
+            "studentsDetails"
+          ]
+        },
+        "description": "Generated from cURL: curl --location 'https://thetestingworldapi.com/api/studentsDetails' \\\r\n--data ''"
+      },
+      "response": []
+    },
+    {
+      "name": "Create_Student",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "/*var jsonData = pm.response.json();\r",
+              "pm.environment.set(\"id\", jsonData.id);*/\r",
+              "var jsonData = pm.response.json();\r",
+              "\r",
+              "if (jsonData && jsonData.id) {\r",
+              "    pm.environment.set(\"id\", jsonData.id);\r",
+              "} else {\r",
+              "    console.log(\"Unexpected response body: \", pm.response.text());\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "//Random firstname\r",
+              "var first_name = pm.variables.replaceIn(\"{{$randomFirstName}}\")\r",
+              "console.log(first_name)\r",
+              "pm.environment.set(\"first_name\", first_name);\r",
+              "\r",
+              "//Random middlename\r",
+              "/* var middle_name = pm.variables.replaceIn(\"{{$randomFirstName}}\")\r",
+              "console.log(middle_name)\r",
+              "pm.environment.set(\"middle_name\", middle_name);*/\r",
+              "\r",
+              "var middleName=[\"Ray\",\"Jun\",\"Paul\",\"Gomez\",\"Biebar\",\"Ann\",\"Callum\",\"Atticus\",\"Asher\"]\r",
+              "var middle_name = middleName[Math.floor(Math.random() * middleName.length)];\r",
+              "pm.environment.set(\"middle_name\", middle_name);\r",
+              "console.log(middle_name)\r",
+              "\r",
+              "//Random last name\r",
+              "var last_name = pm.variables.replaceIn(\"{{$randomLastName}}\")\r",
+              "console.log(last_name)\r",
+              "pm.environment.set(\"last_name\", last_name);\r",
+              "\r",
+              "//Date of birth\r",
+              "const date = require(\"moment\");\r",
+              "//random date 2020 theke 2021 obdi date randomly generate hobe\r",
+              "const startDate = date(\"2000-01-01\");\r",
+              "const endDate = date(\"2021-12-31\");\r",
+              "\r",
+              "//difference\r",
+              "const diff = endDate.diff(startDate, 'days');\r",
+              "const randomDays = Math.floor(Math.random() * diff);\r",
+              "//start date theke random date start korbe\r",
+              "var date_of_birth = startDate.add(randomDays, 'd').format(\"YYYY-MM-DD\");\r",
+              "pm.environment.set(\"date_of_birth\", date_of_birth);\r",
+              "console.log(date_of_birth)"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"first_name\": \"{{first_name}}\",\r\n  \"middle_name\": \"{{middle_name}}\",\r\n  \"last_name\": \"{{last_name}}\",\r\n  \"date_of_birth\": \"{{date_of_birth}}\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/studentsDetails",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "studentsDetails"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Created_student",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var statusCode = pm.response.code\r",
+              "console.log(statusCode)\r",
+              "\r",
+              "switch (statusCode){\r",
+              "    case 200:\r",
+              "            var jsonData = pm.response.json();\r",
+              "\r",
+              "            pm.test(\"Status code is 200\", function () {\r",
+              "                pm.response.to.have.status(200);\r",
+              "            });\r",
+              "            pm.test(\"First Name Validation\", function () {\r",
+              "            pm.expect(pm.environment.get(\"first_name\")).to.eql(jsonData.data.first_name);\r",
+              "});\r",
+              "            pm.test(\"Middle Name Validation\", function () {\r",
+              "            pm.expect(pm.environment.get(\"middle_name\")).to.eql(jsonData.data.middle_name);\r",
+              "});\r",
+              "            pm.test(\"Last Name Validation\", function () {\r",
+              "            pm.expect(pm.environment.get(\"last_name\")).to.eql(jsonData.data.last_name);\r",
+              "});\r",
+              "            \r",
+              "            pm.test(\"Date of Birth Validation\", function () {\r",
+              "            pm.expect(pm.environment.get(\"date_of_birth\")).to.eql(jsonData.data.date_of_birth);\r",
+              "});\r",
+              "}\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/studentsDetails/{{id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "studentsDetails",
+            "{{id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update_student",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "//Random firstname\r",
+              "var first_name = pm.variables.replaceIn(\"{{$randomFirstName}}\")\r",
+              "console.log(first_name)\r",
+              "pm.environment.set(\"first_name\", first_name);\r",
+              "\r",
+              "//Random middlename\r",
+              "/* var middle_name = pm.variables.replaceIn(\"{{$randomFirstName}}\")\r",
+              "console.log(middle_name)\r",
+              "pm.environment.set(\"middle_name\", middle_name);*/\r",
+              "\r",
+              "var middleName=[\"Ray\",\"Jun\",\"Paul\",\"Gomez\",\"Biebar\",\"Ann\",\"Callum\",\"Atticus\",\"Asher\"]\r",
+              "var middle_name = middleName[Math.floor(Math.random() * middleName.length)];\r",
+              "pm.environment.set(\"middle_name\", middle_name);\r",
+              "console.log(middle_name)\r",
+              "\r",
+              "//Random last name\r",
+              "var last_name = pm.variables.replaceIn(\"{{$randomLastName}}\")\r",
+              "console.log(last_name)\r",
+              "pm.environment.set(\"last_name\", last_name);\r",
+              "\r",
+              "//Date of birth\r",
+              "const date = require(\"moment\");\r",
+              "//random date 2020 theke 2021 obdi date randomly generate hobe\r",
+              "const startDate = date(\"2000-01-01\");\r",
+              "const endDate = date(\"2021-12-31\");\r",
+              "\r",
+              "//difference\r",
+              "const diff = endDate.diff(startDate, 'days');\r",
+              "const randomDays = Math.floor(Math.random() * diff);\r",
+              "//start date theke random date start korbe\r",
+              "var date_of_birth = startDate.add(randomDays, 'd').format(\"YYYY-MM-DD\");\r",
+              "pm.environment.set(\"date_of_birth\", date_of_birth);\r",
+              "console.log(date_of_birth)"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "//  For a single data update, the automation should only target the selected field and generate update random data for that field only. All other existing data should remain unchanged.\"\r\n{\r\n  \"id\": \"{{id}}\",\r\n  \"first_name\": \"{{first_name}}\",\r\n  \"middle_name\": \"{{middle_name}}\",\r\n  \"last_name\": \"{{last_name}}\",\r\n  \"date_of_birth\": \"{{date_of_birth}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://thetestingworldapi.com/api/studentsDetails/{{id}}",
+          "protocol": "https",
+          "host": [
+            "thetestingworldapi",
+            "com"
+          ],
+          "path": [
+            "api",
+            "studentsDetails",
+            "{{id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Updated_student_data",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://thetestingworldapi.com/api/studentsDetails/{{id}}",
+          "protocol": "https",
+          "host": [
+            "thetestingworldapi",
+            "com"
+          ],
+          "path": [
+            "api",
+            "studentsDetails",
+            "{{id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete_student",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "https://thetestingworldapi.com/api/studentsDetails/{{id}}",
+          "protocol": "https",
+          "host": [
+            "thetestingworldapi",
+            "com"
+          ],
+          "path": [
+            "api",
+            "studentsDetails",
+            "{{id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete_student_verify",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://thetestingworldapi.com/api/studentsDetails/{{id}}",
+          "protocol": "https",
+          "host": [
+            "thetestingworldapi",
+            "com"
+          ],
+          "path": [
+            "api",
+            "studentsDetails",
+            "{{id}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
