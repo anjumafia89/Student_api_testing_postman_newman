@@ -77,5 +77,3 @@ newman run StudentsDetails.postman_collection.json \
 | Average response time | ~2s |
 
 > **Note:** In one run, `Create_Student` failed because the `base_url` variable was empty — I traced the issue back and confirmed the fix is to always set `base_url` before running the tests. Keeping this note here on purpose, to show how the issue was found and understood.
-
-The full report (with all request/response details) is here: [`reports/newman-run-report.html`](./reports/newman-run-report.html).
